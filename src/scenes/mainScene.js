@@ -105,10 +105,10 @@ export default class MainScene extends Phaser.Scene {
     // set number of repeats
     if (this.is_debug) {
       this.trials = generateTrials(4, user_config.clamp_size, user_config.group)
-      this.typing_speed = 10
+      this.typing_speed = 20
     } else {
         this.trials = generateTrials(80, user_config.clamp_size, user_config.group)
-      this.typing_speed = 10
+      this.typing_speed = 20
       }
 
       //now set the target angle
@@ -265,12 +265,13 @@ export default class MainScene extends Phaser.Scene {
       fontSize: 20,
       wrap: {
         mode: 'word',
-        width: 800
+        width: 800, 
+        align: 'center'
       }
     }).setVisible(false)
 
     this.start_txt = this.add.
-      text(0, hd2 - 100, 'Click the mouse button to continue.', {
+      text(0, hd2 - 50, 'Click the mouse button to continue.', {
         fontFamily: 'Verdana',
         fontSize: 50,
         align: 'center'
@@ -422,10 +423,11 @@ export default class MainScene extends Phaser.Scene {
     document.addEventListener('pointermove', this.ptr_cb, {passive: true, capture: true})
     // initial instructions (move straight through target)
     instruct_txts['instruct_basic'] =
-        `Use your mouse to hit the [color=#00ff00]green[/color] target with the cursor as accurately as possible. Hold the cursor in the white circle at the center of the screen to start a trial.\n
-        After some reaches, you will be asked to rate how confident you are that your next reach will accurately hit the target,\n
-        Use the arrow (or numpad) keys on your keyboard to control the bar on the colored rating scale. The [color=#00ff00]UP-arrow[/color] increases confidence and [color=#ff0000]DOWN[/color] decreases confidence. Holding down an arrow key moves the bar faster. Change your confidence based on how accurate you are! Then Press ENTER to register your rating.\n
-        Some trials will require a confidence rating and others will not. In the example below we show the system cursor to illustrate the mouse position, but it will never be visible when you are doing the task.`
+        `Use your mouse to hit the [color=#00ff00]green[/color] target with the cursor as accurately as possible. Hold the cursor in the white circle at the center of the screen to start a trial\n
+After 10 practice reaches, you will be asked to rate how confident you are that your next reach will accurately hit the target\n
+Use the arrow (or numpad) keys to control the bar on the colored scale between zero and 100%. The [color=#00ff00]UP[/color] increases confidence and [color=#ff0000]DOWN[/color] decreases confidence, then Press ENTER to register your rating\n
+After each rating, the bar will reset to 50% confidence (middle)\n
+In the example below we show ratings of 80% and 20%. Also, the system cursor is shown only to illustrate the mouse position, but it will never be visible when you are doing the task.`
         
         instruct_txts['instruct_aim'] =
           `Great work! Now, before each trial, we may ask you to indicate where you intend to move. Use your mouse to control the reticle and place the X where you intend to move your hand. \n
@@ -433,9 +435,9 @@ export default class MainScene extends Phaser.Scene {
 
       instruct_txts['instruct_report'] =
       `Now, before each reach, use your keyboard arrows to rate how confident you are that where you reach will result in a target hit. \n
-      UP is higher confidence, DOWN is lower confidence. \n
-      The rating bar always starts in the middle\n
-      Once you've rated your confidence, press ENTER to register your rating, then reach again!`
+UP is higher confidence, DOWN is lower confidence. The highest confidence value is 100%, the lowest is 0% \n
+The rating bar always starts in the middle at 50% confident\n
+Once you've rated your confidence, press ENTER to register your rating, then reach again!`
   
 
     instruct_txts['instruct_clamp'] =

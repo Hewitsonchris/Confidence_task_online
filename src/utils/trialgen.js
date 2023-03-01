@@ -30,7 +30,7 @@ repeats (default 80) is number of repeats per clamp type
 
 
 
-export default function generateTrials(repeats = 80, CLAMP_ANGLE = 4, group = 1) {
+export default function generateTrials(repeats = 80, CLAMP_ANGLE = 4, group = 1, debug = true) {
 
     //const FB_types = {
     //    mp: 1,
@@ -41,14 +41,14 @@ export default function generateTrials(repeats = 80, CLAMP_ANGLE = 4, group = 1)
 
     let practice_reps = 0
     let aim_reps = 0
-    let base_rep = 10
-    let practice_report_reps = 10
-    let report_reps = 150
+    let base_rep = debug ? 0 : 10
+    let practice_report_reps = debug ? 0 : 20
+    let report_reps = debug ? 1 : 150
     let clamp_reps = 0
     let rot_reps = 0
-    let wash_reps = 50
-    let targ_loc = 270
-    let step = 0.25
+    let wash_reps = debug ? 5 : 20
+    let targ_loc = 315
+    let step = 0.33
     let SD_pert = 2;
 
     if (group == 1) {
@@ -131,7 +131,7 @@ export default function generateTrials(repeats = 80, CLAMP_ANGLE = 4, group = 1)
             target_angle: targ_loc,
             cursor_cloud_sd: 0,
             step_val: sign*Math.min(max_pert,i*step),
-            max: max_pert,
+            max: sign*max_pert,
             sign_val: sign,
             group_num: group,
             grad_bool: grad
