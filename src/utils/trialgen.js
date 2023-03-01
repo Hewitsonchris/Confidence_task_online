@@ -30,7 +30,7 @@ repeats (default 80) is number of repeats per clamp type
 
 
 
-export default function generateTrials(repeats = 80, CLAMP_ANGLE = 4, group = 1, debug = true) {
+export default function generateTrials(repeats = 80, CLAMP_ANGLE = 4, group = 1, debug = false) {
 
     //const FB_types = {
     //    mp: 1,
