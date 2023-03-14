@@ -34,19 +34,19 @@ export default class EndScene extends Phaser.Scene {
 
       if (!is_sona) {
         window.removeEventListener('beforeunload', onBeforeUnload)
-        var a = document.createElement("a");
-        var file = new Blob([JSON.stringify(alldata)], { type: "text/plain" });
-        a.href = URL.createObjectURL(file);
-        a.download = `data_${JSON.stringify(new Date())}.json`;
-        a.click();
-        URL.revokeObjectURL(a.href);
+        // var a = document.createElement("a");
+        // var file = new Blob([JSON.stringify(alldata)], { type: "text/plain" });
+        // a.href = URL.createObjectURL(file);
+        // a.download = `data_${JSON.stringify(new Date())}.json`;
+        // a.click();
+        // URL.revokeObjectURL(a.href);
         Promise.all(postData(alldata)).then((values) => {
-          window.location.href = mostly + '8E059F9A'
+          window.location.href = mostly + 'C1L2M7P7'
         })
       } else {
           window.removeEventListener('beforeunload', onBeforeUnload)
           Promise.all(postData(alldata)).then((values) => {
-          window.location.href = mostly + '8E059F9A'
+          window.location.href = mostly + 'C1L2M7P7'
         })
         // allow option to download the debrief
         //
