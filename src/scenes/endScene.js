@@ -41,7 +41,7 @@ export default class EndScene extends Phaser.Scene {
         // a.click();
         // URL.revokeObjectURL(a.href);
         Promise.all(postData(alldata)).then((values) => {
-          window.location.href = mostly + 'C1L2M7P7'
+        window.location.href = mostly + 'C1L2M7P7'
         })
       } else {
           window.removeEventListener('beforeunload', onBeforeUnload)
