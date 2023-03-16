@@ -11,7 +11,7 @@ function sendMailgun(buf2, id, callback) {
     create(DOMAIN, {
       from: 'The Mailgun Machine <mailgun@' + DOMAIN + '>',
       to: 'actlab@yale.edu',
-      subject: `[confidence_${grp}_${id}`, //GROUP from URL
+      subject: `[confidence_${id}]`, //GROUP from URL
       text: 'see attached. ',
       attachment: { data: buf, filename: `confidence_${id}.json` }
     }).
