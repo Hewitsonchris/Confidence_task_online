@@ -60,7 +60,7 @@ window.addEventListener('load', async() => {
     id: id.slice(0, 8), // just the first part of the ID, we don't need to store the whole thing
     is_prolific: url_params.get('PROLIFIC_PID') !== null,
     is_sona: url_params.get('SONA_ID') !== null,
-    group: url_params.get('GROUP'),
+    group: url_params.get('GROUP') || '1',
     institution: 'yale',
     description: 'Confidence v2',
     datetime: new Date(),
