@@ -104,10 +104,10 @@ export default class MainScene extends Phaser.Scene {
 
     // set number of repeats
     if (this.is_debug) {
-      this.trials = generateTrials(4, user_config.clamp_size, user_config.group)
-      this.typing_speed = 20
+      this.trials = generateTrials(4, user_config.clamp_size, user_config.group, this.is_debug)
+      this.typing_speed = 1
     } else {
-        this.trials = generateTrials(80, user_config.clamp_size, user_config.group)
+        this.trials = generateTrials(80, user_config.clamp_size, user_config.group, this.is_debug)
       this.typing_speed = 20
       }
 
@@ -150,69 +150,75 @@ export default class MainScene extends Phaser.Scene {
       this.sense = 2 //sensitivity of slider to arrow key press
 
         //also txt showing the value!
-        this.confidence_txt1 = this.add.text(-270, 100, 'Not confident', {
+        this.confidence_txt1 = this.add.text(-250, 100, 'Not confident: DOWN', {
           fontFamily: 'Verdana',
           color: '#ffffff',
           backgroundColor: '#000000',
-          fontSize: 24,
+          fontSize: 18,
           align: 'center'
-      }).
-          setOrigin(1, 0.5).setVisible(false)
-      this.confidence_txt2 = this.add.text(-260, -80, 'Very confident', {
-          fontFamily: 'Verdana',
-          color: '#ffffff',
-          backgroundColor: '#000000',
-          fontSize: 24,
-          align: 'center'
-      }).
-          setOrigin(1, 0.5).setVisible(false)
+      }). setOrigin(1, 0.5).setVisible(false)
+
+      this.confidence_txt2 = this.add.text(-260, -80, 'Very confident: UP', {
+        fontFamily: 'Verdana',
+        color: '#ffffff',
+        backgroundColor: '#000000',
+        fontSize: 18,
+        align: 'center'
+      }). setOrigin(1, 0.5).setVisible(false)
+
       this.confidence_instruct = this.add.text(0, -450, 'How confident are you about your next reach?', {
-          fontFamily: 'Verdana',
-          color: '#ffffff',
-          backgroundColor: '#000000',
-          fontSize: 40,
-          align: 'center'
+            fontFamily: 'Verdana',
+            color: '#ffffff',
+            backgroundColor: '#000000',
+            fontSize: 40,
+            align: 'center'
       }).
           setOrigin(0.5, 0.5).setVisible(false)
 
     
 
       //slider using arrow keys (with smooth acceleration)
-      this.input.keyboard.on('keydown-UP', (evt) => {
-         if (this.confidence_thumb.visible) {
-          this.keypress = true
-             if (evt.repeat)
-                 this.sense = Math.min(this.sense + 0.5, 4)
-             else
-                 this.sense = 2
-             this.confidence_thumb.y = Math.max(-50, this.confidence_thumb.y - this.sense)
-             this.confidence_value = Math.round(((-this.confidence_thumb.y) + 50 / 100) * 100)
-             if(this.confidence_thumb.y <0)
-              var scale_color = Phaser.Display.Color.GetColor((((this.confidence_thumb.y + 50)/50)*255), 255, 0)
-             else
-              var scale_color = Phaser.Display.Color.GetColor(255, (255-(this.confidence_thumb.y/50)*255), 0)
+      const upCb = (evt) => {
+        if (this.confidence_thumb.visible) {
+         this.keypress = true
+            if (evt.repeat)
+                this.sense = Math.min(this.sense + 0.5, 4)
+            else
+                this.sense = 2
+            this.confidence_thumb.y = Math.max(-50, this.confidence_thumb.y - this.sense)
+            this.confidence_value = Math.round(((-this.confidence_thumb.y) + 50 / 100) * 100)
+            if(this.confidence_thumb.y <0)
+             var scale_color = Phaser.Display.Color.GetColor((((this.confidence_thumb.y + 50)/50)*255), 255, 0)
+            else
+             var scale_color = Phaser.Display.Color.GetColor(255, (255-(this.confidence_thumb.y/50)*255), 0)
 
-             console.log(scale_color);
-             this.confidence_scale.setFillStyle(scale_color)
-         }
-      })
-      this.input.keyboard.on('keydown-DOWN', (evt) => {
-         if (this.confidence_thumb.visible) {
-          this.keypress = true
-             if (evt.repeat)
-                 this.sense = Math.min(this.sense + 0.5, 4)
-             else
-                 this.sense = 2
-             this.confidence_thumb.y = Math.min(50, this.confidence_thumb.y + this.sense)
-             this.confidence_value = Math.round(((-this.confidence_thumb.y + 50) / 100) * 100)
-             if(this.confidence_thumb.y <0)
-              var scale_color = Phaser.Display.Color.GetColor((((this.confidence_thumb.y + 50)/50)*255), 255, 0)
-             else
-              var scale_color = Phaser.Display.Color.GetColor(255, (255-(this.confidence_thumb.y/50)*255), 0)
-             console.log(scale_color);
-             this.confidence_scale.setFillStyle(scale_color)
-         }
-      })
+            console.log(scale_color);
+            this.confidence_scale.setFillStyle(scale_color)
+        }
+     }
+
+     const dnCb = (evt) => {
+      if (this.confidence_thumb.visible) {
+       this.keypress = true
+          if (evt.repeat)
+              this.sense = Math.min(this.sense + 0.5, 4)
+          else
+              this.sense = 2
+          this.confidence_thumb.y = Math.min(50, this.confidence_thumb.y + this.sense)
+          this.confidence_value = Math.round(((-this.confidence_thumb.y + 50) / 100) * 100)
+          if(this.confidence_thumb.y <0)
+           var scale_color = Phaser.Display.Color.GetColor((((this.confidence_thumb.y + 50)/50)*255), 255, 0)
+          else
+           var scale_color = Phaser.Display.Color.GetColor(255, (255-(this.confidence_thumb.y/50)*255), 0)
+          console.log(scale_color);
+          this.confidence_scale.setFillStyle(scale_color)
+      }
+   }
+
+      this.input.keyboard.on('keydown-UP', upCb)
+      this.input.keyboard.on('keydown-W', upCb)
+      this.input.keyboard.on('keydown-DOWN', dnCb)
+      this.input.keyboard.on('keydown-S', dnCb)
 
       //aim
       this.aim_angle = 0
@@ -425,7 +431,7 @@ export default class MainScene extends Phaser.Scene {
     instruct_txts['instruct_basic'] =
         `Use your mouse to hit the [color=#00ff00]green[/color] target with the cursor as accurately as possible. Hold the cursor in the white circle at the center of the screen to start a trial\n
 After 10 practice reaches, you will be asked to rate how confident you are that your next reach will accurately hit the target\n
-Use the arrow (or numpad) keys to control the bar on the colored scale between zero and 100%. The [color=#00ff00]UP[/color] increases confidence and [color=#ff0000]DOWN[/color] decreases confidence, then Press ENTER to register your rating\n
+Use the Arrow, Numpad, or WASD keys to control the bar on the colored scale between zero and 100%. [color=#00ff00]UP[/color] increases confidence and [color=#ff0000]DOWN[/color] decreases confidence, then right click to register your rating\n
 After each rating, the bar will reset to 50% confidence (middle)\n
 In the example below we show ratings of 80% and 20%. Also, the system cursor is shown only to illustrate the mouse position, but it will never be visible when you are doing the task.`
         
@@ -434,10 +440,10 @@ In the example below we show ratings of 80% and 20%. Also, the system cursor is 
             Once you've set where your intended aim, right click to proceed to the trial. Remember to move toward where you aimed!`
 
       instruct_txts['instruct_report'] =
-      `Now, before each reach, use your keyboard arrows to rate how confident you are that where you reach will result in a target hit. \n
-UP is higher confidence, DOWN is lower confidence. The highest confidence value is 100%, the lowest is 0% \n
+      `Now, before each reach, use your keyboard to rate how confident you are that where you reach will result in a target hit. \n
+UP, Numpad-8 or 'W' keys is higher confidence, DOWN, Numpad-2 or 'S' is lower confidence. The highest confidence value is 100%, the lowest is 0% \n
 The rating bar always starts in the middle at 50% confident\n
-Once you've rated your confidence, press ENTER to register your rating, then reach again!`
+Once you've rated your confidence, right click to register your rating, then reach again!`
   
 
     instruct_txts['instruct_clamp'] =
@@ -561,8 +567,7 @@ Once you've rated your confidence, press ENTER to register your rating, then rea
            
           }
 
-          if(this.keypress == true) {
-            this.input.keyboard.once('keydown-ENTER', () => {
+          this.input.on('pointerdown', () => {
                 this.aim_line.visible = false
                 this.aim_reticle.visible = false
                 this.aim_txt.visible = false
@@ -575,7 +580,7 @@ Once you've rated your confidence, press ENTER to register your rating, then rea
                 console.log("Confidence: " + this.confidence_value)
                 this.state = states.PRETRIAL
             })
-        }
+        
   break
 
     case states.PRETRIAL:
