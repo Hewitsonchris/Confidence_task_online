@@ -105,7 +105,7 @@ export default class MainScene extends Phaser.Scene {
     // set number of repeats
     if (this.is_debug) {
       this.trials = generateTrials(4, user_config.clamp_size, user_config.group, this.is_debug)
-      this.typing_speed = 1
+      this.typing_speed = 20
     } else {
         this.trials = generateTrials(80, user_config.clamp_size, user_config.group, this.is_debug)
       this.typing_speed = 20
@@ -147,7 +147,7 @@ export default class MainScene extends Phaser.Scene {
       this.confidence_scale = this.add.rectangle(-350, 0, 50, 100, 0xffff00).setOrigin(0.5, 0.5).setVisible(false)
       this.confidence_thumb = this.add.rectangle(-350, 0, 50, 2, 0x3b719f).setOrigin(0.5, 0.5).setVisible(false)
       this.confidence_value = 0
-      this.sense = 2 //sensitivity of slider to arrow key press
+      this.sense = 4 //sensitivity of slider to arrow key press
 
         //also txt showing the value!
         this.confidence_txt1 = this.add.text(-250, 100, 'Not confident: DOWN', {
@@ -184,7 +184,7 @@ export default class MainScene extends Phaser.Scene {
             if (evt.repeat)
                 this.sense = Math.min(this.sense + 0.5, 4)
             else
-                this.sense = 2
+                this.sense = 4
             this.confidence_thumb.y = Math.max(-50, this.confidence_thumb.y - this.sense)
             this.confidence_value = Math.round(((-this.confidence_thumb.y) + 50 / 100) * 100)
             if(this.confidence_thumb.y <0)
@@ -203,7 +203,7 @@ export default class MainScene extends Phaser.Scene {
           if (evt.repeat)
               this.sense = Math.min(this.sense + 0.5, 4)
           else
-              this.sense = 2
+              this.sense = 4
           this.confidence_thumb.y = Math.min(50, this.confidence_thumb.y + this.sense)
           this.confidence_value = Math.round(((-this.confidence_thumb.y + 50) / 100) * 100)
           if(this.confidence_thumb.y <0)
@@ -431,19 +431,19 @@ export default class MainScene extends Phaser.Scene {
     instruct_txts['instruct_basic'] =
         `Use your mouse to hit the [color=#00ff00]green[/color] target with the cursor as accurately as possible. Hold the cursor in the white circle at the center of the screen to start a trial\n
 After 10 practice reaches, you will be asked to rate how confident you are that your next reach will accurately hit the target\n
-Use the Arrow, Numpad, or WASD keys to control the bar on the colored scale between zero and 100%. [color=#00ff00]UP[/color] increases confidence and [color=#ff0000]DOWN[/color] decreases confidence, then right click to register your rating\n
+Use the Arrow, Numpad, or WASD keys to control the bar on the colored scale between zero and 100%. [color=#00ff00]UP[/color] increases confidence and [color=#ff0000]DOWN[/color] decreases confidence, then left click to register your rating\n
 After each rating, the bar will reset to 50% confidence (middle)\n
 In the example below we show ratings of 80% and 20%. Also, the system cursor is shown only to illustrate the mouse position, but it will never be visible when you are doing the task.`
         
         instruct_txts['instruct_aim'] =
           `Great work! Now, before each trial, we may ask you to indicate where you intend to move. Use your mouse to control the reticle and place the X where you intend to move your hand. \n
-            Once you've set where your intended aim, right click to proceed to the trial. Remember to move toward where you aimed!`
+            Once you've set where your intended aim, left click to proceed to the trial. Remember to move toward where you aimed!`
 
       instruct_txts['instruct_report'] =
       `Now, before each reach, use your keyboard to rate how confident you are that where you reach will result in a target hit. \n
 UP, Numpad-8 or 'W' keys is higher confidence, DOWN, Numpad-2 or 'S' is lower confidence. The highest confidence value is 100%, the lowest is 0% \n
 The rating bar always starts in the middle at 50% confident\n
-Once you've rated your confidence, right click to register your rating, then reach again!`
+Once you've rated your confidence, left click to register your rating, then reach again!`
   
 
     instruct_txts['instruct_clamp'] =
@@ -566,8 +566,9 @@ Once you've rated your confidence, right click to register your rating, then rea
 
            
           }
-
-          this.input.on('pointerdown', () => {
+          if(this.keypress == true) {
+          //this.input.keyboard.once('keydown-ENTER', () => {
+          this.input.once('pointerdown', () => {
                 this.aim_line.visible = false
                 this.aim_reticle.visible = false
                 this.aim_txt.visible = false
@@ -579,7 +580,8 @@ Once you've rated your confidence, right click to register your rating, then rea
                 this.confidence_value = Math.round(((-this.confidence_thumb.y + 50) / 100) * 100)
                 console.log("Confidence: " + this.confidence_value)
                 this.state = states.PRETRIAL
-            })
+                this.keypress == false
+            })}
         
   break
 
